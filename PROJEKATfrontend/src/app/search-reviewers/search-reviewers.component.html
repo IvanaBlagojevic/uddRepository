@@ -1,0 +1,58 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+    <div class="container p-2">
+        <div class="row ml-1 mr-1">
+            <div class="col-md-4 py-5 bg-info text-white">
+                <h2>Search reviewers</h2>
+                <h4>Heading : {{article.heading}}</h4>
+                <h4>Author: {{article.author.name}} {{article.author.surname}}</h4>
+                <h4>Scientific field: {{article.mainSC}}</h4>
+            </div>
+
+            <div class="container py-4 mt-4">
+                <div class="row mt-4">
+                    <form [formGroup]="myForm" (ngSubmit)="onSubimitBasic()">
+                        <div class="form-group" [formGroup]="myGroup">
+                            <label>Choose scientific field</label>
+                            <ng-multiselect-dropdown name="ime" [placeholder]="'Choose'" [data]="dropdownList" ngModel [settings]="dropdownSettings"
+                            (onDeSelect)="onItemDeSelect($event)" (onSelect)="onItemSelect($event)" value=selectedItems
+                            ></ng-multiselect-dropdown>
+                        
+                        <input type="checkbox" id="more" name="more" fromControlName="more" [(ngModel)]="isMoreLikeThis" [ngModelOptions]="{standalone: true}" value=isMoreLikeThis>
+                        <label for="more">Similar articles</label><br>
+                        <input type="checkbox" id="km" name="km" fromControlName="km" [(ngModel)]="isInDomain" [ngModelOptions]="{standalone: true}" value=isInDomain>
+                        <label for="km"> Is in domain</label><br>
+                        <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                    </form>
+                    
+                    <div class="row mt-6">
+                        <div class="col-lg-10 col-sm-6 mb-6" *ngFor="let reviewer of listReviewers; let i = index">
+                          <div class="card shadow border-0 h-100">
+                            <h4 class="card-title">{{reviewer.name}} {{reviewer.surname}}</h4>
+                            <p class="card-text">City: {{reviewer.city}}</p>
+                            <p class="card-text">State: {{reviewer.state}}</p> 
+                           <!-- <div class="card-text" *ngFor="let role of reviewer.roles">
+                                <p class="card-text">Role: {{role.name}}</p>
+                            </div>-->
+                             
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

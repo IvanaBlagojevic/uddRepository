@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: scientificCentralService
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_camunda?useSSL=false&createDatabaseIfNotExist=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: sifra
+    ddriverClassName : com.mysql.jdbc.Driver
+    initialization-mode: always
+  jpa:
+     hibernate:
+        ddl-auto: create-drop
+     database-platform : org.hibernate.dialect.MySQL5Dialect
+     generate-ddl: true
+      #dialect: org.hibernate.dialect.MySQL5Dialect
+     
+  #main:
+    #allow-bean-definition-overriding: true
+  data:
+     elasticsearch:
+         host: localhost
+         cluster-name: sc
+         cluster-nodes: localhost:9300
+         properties:
+             http:
+                enabled: true
+
+camunda:
+   url: http://localhost:8102/rest/deployment/create
+   bpm:
+      admin-user:
+         id: demo
+         password: demo
+
+elasticsearch:
+   baseUrl: http://localhost:9200/
+
+   
+
+server:
+  port: 8181

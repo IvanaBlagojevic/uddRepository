@@ -1,0 +1,147 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body class="bg-light">
+  <nav class="navbar navbar-light bg-white  navbar-expand-md">
+    <div class="collapse navbar-collapse" id="navbarNav3">
+      <p>Welcome to homepage</p>
+      <li class="nav-item active" *ngIf="someoneLogged == false">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+      <li class="nav-item active" *ngIf="someoneLogged == false">
+        <a class="nav-link" href="/registrate">Registrate</a>
+      </li>
+      <li class="nav-item active" *ngIf="someoneLogged == true">
+        <a class="nav-link" [routerLink]="" (click)="logout()">Logout</a>
+      </li>
+      <li class="nav-item active" *ngIf="someoneLogged == true">
+        <a class="nav-link" href="/admin">My tasks</a>
+      </li>
+      <li class="nav-item active" *ngIf="editorLogged == true && isEditorInMagzine==false">
+        <a class="nav-link" href="/newMagazine/new">New magazine</a>
+      </li>
+      <li class="nav-item active" *ngIf="editorLogged == true">
+        <a class="nav-link" href="/admin">Editor tasks</a>
+      </li>
+    </div>
+  </nav>
+  <div class="container p-2">
+    <div class="row ml-1 mr-1">
+      <div class="col-md-4 py-5 bg-info text-white">
+        <h2>Search</h2>
+      </div>
+      <div class="container py-4 mt-4">
+        <div class="row mt-4">
+          <form (ngSubmit)="onSubimitBasic()">
+            <div class="form-group">
+              <label for="input_lname">Basic search</label>
+              <ng-multiselect-dropdown name="basic" placeholder="Choose" [data]="dropdownList" ngModel
+                [settings]="dropdownSettings" (onDeSelect)="onItemDeSelect($event)" (onSelect)="onItemSelect($event)"
+                value=selectedItems></ng-multiselect-dropdown>
+              <input type="text" name="queryBasic" class="form-control" placeholder="Enter query"
+                [(ngModel)]="basicQuery">
+            </div>
+            <input type="submit" value="Submit" class="btn btn-primary">
+          </form>
+          <div class="row mt-6">
+            <div class="col-lg-10 col-sm-6 mb-6" *ngFor="let a of articlesBasic; let i = index">
+              <div class="card shadow border-0 h-100">
+                <h4 class="card-title">Heading : {{a.article.heading}}</h4>
+                <p class="card-text">Magazine: {{a.article.magazine}}</p>
+                <p class="card-text">Author: {{a.article.author}}</p>
+                <div [innerHTML]="a.highlights"></div>
+                <div class="row">
+                  <div class="col">
+                    <a id="hrefButton" href="/searchReviewers/{{a.article.id}}" class="btn btn-success btn-block">Reviewers</a>
+                  </div>
+                </div>
+                <div class="row" *ngIf="a.article.openAccess == false">
+                  <div class="col">
+                    <a id="hrefButton" (click)="addArticle(a)" class="btn btn-success btn-block">Buy</a>
+                  </div>
+                </div>
+                <div class="row" *ngIf="a.article.openAccess == true">
+                  <div class="col">
+                    <a id="hrefButton" (click)="download(a.article.heading)"
+                      class="btn btn-success btn-block">Download</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container py-4 mt-4">
+
+        <div class="row mt-4">
+          <div class="col-md-8 py-5 border">
+            <form #f="ngForm" (ngSubmit)="onSubmitAdvanced()" ngNativeValidate>
+              <div class="form-group">
+                <label for="input_fname">Advanced search</label>
+              </div>
+              <div class="form-group">
+                <div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                  <a id="move" class="btn btn-primary" (click)="addField()">Add field</a>
+                </div>
+              </div>
+              <div class="form-group" *ngFor='let m of listFields; let i = index'>
+
+                <div class="form-group">
+                  <select [(ngModel)]="m.operation" id="operation" name="operation">
+                    <option value="AND" name="AND">AND</option>
+                    <option value="OR" name="OR">OR</option>
+                  </select>
+                  <ng-multiselect-dropdown #reporteedropDown class="custom-font-size" name="basic" placeholder="Choose"
+                    [data]="dropdownList" [(ngModel)]="m.field" [settings]="dropdownSettings"
+                    (onDeSelect)="onItemDeSelect($event)" (onSelect)="onItemSelect($event)" value="selectedItems">
+                  </ng-multiselect-dropdown>
+                  <input type="text" name="a" class="form-control" placeholder="Enter query" [(ngModel)]="m.query">
+                  <input type="checkbox" name="p" class="form-control" placeholder="Is phrase" [(ngModel)]="m.isPhrase">
+                </div>
+              </div>
+
+              <input type="submit" value="Submit" class="btn btn-primary">
+            </form>
+            <div class="row mt-6">
+              <div class="col-lg-10 col-sm-6 mb-6" *ngFor="let aa of articlesAdvanced; let i = index">
+                <div class="card shadow border-0 h-100">
+                  <h4 class="card-title">Heading : {{aa.article.heading}}</h4>
+                  <p class="card-text">Magazine: {{aa.article.magazine}}</p>
+                  <p class="card-text">Author: {{aa.article.author}}</p>
+                  <div [innerHTML]="aa.highlights"></div>
+                  <div class="row">
+                    <div class="col">
+                      <a id="hrefButton" href="/searchReviewers/{{aa.article.id}}" class="btn btn-success btn-block">Reviewers</a>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="aa.article.openAccess == false">
+                    <div class="col">
+                      <a id="hrefButton" (click)="addArticle(aa)" class="btn btn-success btn-block">Buy</a>
+                    </div>
+                  </div>
+                  <div class="row" *ngIf="aa.article.openAccess == true">
+                    <div class="col">
+                      <a id="hrefButton" (click)="download(aa.article.heading)"
+                        class="btn btn-success btn-block">Download</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

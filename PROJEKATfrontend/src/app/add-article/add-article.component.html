@@ -1,0 +1,47 @@
+<div class="main">
+
+    <section class="signup">
+        <div class="container">
+            <div class="signup-content">
+                <form #f="ngForm" ngNativeValidate id="signup-form" action="#" (ngSubmit)="onSubmit(f.value, f)" class="signup-form">
+                    <div *ngFor="let field of formFields" >
+                        <label for={{field.id}}>{{field.label}}</label>
+                        <div class="form-group" *ngIf="field.type.name=='string'">
+                            <input name={{field.id}} type="text" class="form-input" ngModel id={{field.id}}
+                                [required]="true" />
+                        </div>
+
+                        <div class="form-group" *ngIf="field.type.name=='boolean'">
+                            <input type="checkbox" name={{field.id}} class="form-input" ngModel  id={{field.id}}/>
+                        </div>
+
+                        <div class="form-group" *ngIf="field.type.name=='long'">
+                            <input name={{field.id}} type="number" class="form-input" ngModel id={{field.id}}
+                                [required]="true" />
+                        </div>
+                    
+                        <div *ngIf="field.type.name=='email'">
+                            <input name={{field.id}} type="email" class="form-input" ngModel placeholder="Email" id={{field.id}}
+                                [required]="true" />
+                        </div>
+
+                        <div *ngIf="field.type.name=='enum'" >
+                            <ng-multiselect-dropdown name={{field.id}} [placeholder]="'Choose'" [data]="dropdownList" ngModel [settings]="dropdownSettings"
+                                    (onDeSelect)="onItemDeSelect($event)" (onSelect)="onItemSelect($event)" value=selectedItems (onSelectAll)="onSelectAll($event)"
+                                    ></ng-multiselect-dropdown>
+                        </div>
+                        
+                    </div>
+                    <div class="form-group" *ngIf="what == 'article'">
+                        <input type="file"  accept="application/pdf,application/vnd.ms-excel"  (change)="handleFileInput($event.target.files)"  class="form-input" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="submit" id="submit" class="form-submit" value="Submit" />
+                    </div>
+                </form>
+            </div>
+        </div>
+       
+    </section>
+  
+  </div>
